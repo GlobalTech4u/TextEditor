@@ -1,0 +1,38 @@
+.comment-card-body {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  text-align: left;
+  row-gap: 8px;
+  margin: 24px;
+}
+
+.card-delete-button {
+  width: auto;
+  align-self: flex-start;
+  padding: 0 !important;
+}
+
+.comment {
+  font-size: 20px;
+  font-weight: 400;
+  cursor: pointer;
+}
+
+.date-time {
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.avtar-container {
+  display: flex;
+  flex-direction: row;
+  column-gap: 8px;
+  align-items: center;
+}
+
+.comments-wrapper {
+  display: flex;
+  flex-direction: column;
+  row-gap: 16px;
+}
