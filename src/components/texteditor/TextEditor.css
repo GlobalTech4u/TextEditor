@@ -1,5 +1,6 @@
 .quill {
   height: 400px;
+  margin-top: 16px;
 }
 
 .comments-container {
@@ -7,6 +8,7 @@
 }
 
 .text-editor-container {
+  text-align: left;
   width: 60%;
 }
 
@@ -52,4 +54,9 @@
 
 .modal-close-icon {
   cursor: pointer;
+}
+
+.editor-title {
+  font-size: 24px;
+  font-weight: 400;
 }
