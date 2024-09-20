@@ -12,11 +12,13 @@ import CommentModal from "../commentsModal/CommentsModal";
 import { CustomToolbar } from "../customToolbar/CustomToolBar";
 
 import "./TextEditor.css";
+import VoiceModal from "../voiceModal/VoiceModal";
 
 const TextEditor = () => {
   const [editorState, setEditorState] = useState("");
   const [comments, setComments] = useState([]);
   const [showAddCommentModal, setShowAddCommentModal] = useState(false);
+  const [showVoiceModal, setShowVoiceModal] = useState(false);
   const [selectedText, setSelectedText] = useState({ index: 0, length: 0 });
   const [commentText, setCommentText] = useState("");
   const [showToolbar, setShowToolbar] = useState(false);
@@ -72,7 +74,9 @@ const TextEditor = () => {
     setShowAddCommentModal(true);
   };
 
-  const handleModalClose = () => setShowAddCommentModal(false);
+  const handleCommentModalClose = () => setShowAddCommentModal(false);
+
+  const handleVoiceModalClose = () => setShowVoiceModal(false);
 
   const onAddComment = () => {
     setComments([
@@ -85,7 +89,7 @@ const TextEditor = () => {
       },
       ...comments,
     ]);
-    handleModalClose();
+    handleCommentModalClose();
   };
 
   const highlightText = (comment) => {
@@ -106,6 +110,11 @@ const TextEditor = () => {
     }
   };
 
+  const handleVoiceArjustment = () => {
+
+    setShowVoiceModal(true)
+  }
+
   const modules = useMemo(
     () => ({
       toolbar: {
@@ -118,6 +127,7 @@ const TextEditor = () => {
             quillRef.current.getEditor().history.redo();
           },
           comment: openAddCommentModal,
+          voice: handleVoiceArjustment
         },
       },
       history: {
@@ -156,10 +166,14 @@ const TextEditor = () => {
         </div>
       </div>
       <CommentModal
-        handleModalClose={handleModalClose}
+        handleCommentModalClose={handleCommentModalClose}
         updateCommentText={updateCommentText}
         onAddComment={onAddComment}
         showAddCommentModal={showAddCommentModal}
+      />
+      <VoiceModal
+        showVoiceModal={showVoiceModal}
+        handleVoiceModalClose={handleVoiceModalClose}
       />
     </>
   );
