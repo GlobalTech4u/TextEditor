@@ -5,6 +5,7 @@ import FormatBoldRoundedIcon from "@mui/icons-material/FormatBoldRounded";
 import RedoRoundedIcon from "@mui/icons-material/RedoRounded";
 import UndoRoundedIcon from "@mui/icons-material/UndoRounded";
 import InsertCommentRoundedIcon from "@mui/icons-material/InsertCommentRounded";
+import MicExternalOnRoundedIcon from '@mui/icons-material/MicExternalOnRounded';
 
 import 'react-quill/dist/quill.snow.css';
 
@@ -50,6 +51,13 @@ const CustomToolbar = ({ toolbarPosition, showToolbar }) => {
                 <Tooltip title="Redo">
                     <button className="ql-redo">
                         <RedoRoundedIcon />
+                    </button>
+                </Tooltip>
+            </span>
+            <span className="ql-formats">
+                <Tooltip title="voice">
+                    <button className="ql-voice">
+                        <MicExternalOnRoundedIcon />
                     </button>
                 </Tooltip>
             </span>
