@@ -1,0 +1,4 @@
+const PIXELS_PER_RANGE = 85
+const RANGE = 5
+
+export { RANGE, PIXELS_PER_RANGE }

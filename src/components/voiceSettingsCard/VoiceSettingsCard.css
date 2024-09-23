@@ -1,8 +1,9 @@
-.comment-card-body {
+.voice-settings-card-body {
   display: flex;
   flex-direction: column;
   max-width: 100%;
   text-align: left;
+  row-gap: 6px;
   margin: 24px;
 }
 
@@ -13,7 +14,7 @@
   padding: 0 !important;
 }
 
-.comment {
+.voice-settings {
   font-size: 16px;
   font-weight: 400;
   cursor: pointer;
@@ -31,7 +32,7 @@
   align-items: center;
 }
 
-.comments-wrapper {
+.voice-settings-wrapper {
   display: flex;
   flex-direction: column;
   row-gap: 16px;
