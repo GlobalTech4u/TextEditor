@@ -1,8 +1,8 @@
-import Card from "@mui/material/Card";
-import Button from "@mui/material/Button";
 import moment from "moment";
-import Avatar from "@mui/material/Avatar";
+
 import InsertCommentRoundedIcon from "@mui/icons-material/InsertCommentRounded";
+import DeleteForeverRoundedIcon from "@mui/icons-material/DeleteForeverRounded";
+import { Avatar, Card, CardHeader, Tooltip } from "@mui/material";
 
 import "./CommentsCard.css";
 
@@ -17,24 +17,26 @@ const CommentsCard = (props) => {
     <div className="comments-wrapper">
       {comments?.map((comment) => {
         return (
-          <Card onClick={() => highlightText(comment)}>
-            <div className="comment-card-body">
-              <div className="avtar-container">
+          <Card onClick={() => highlightText(comment)} key={comment?.id}>
+            <CardHeader
+              avatar={
                 <Avatar variant="circular">
                   <InsertCommentRoundedIcon />
                 </Avatar>
-                <span className="date-time">
-                  {moment(comment?.time).format("YYYY/MM/DD kk:mm:ss")}
-                </span>
-              </div>
+              }
+              title="Comment"
+              subheader={moment(comment?.time).format("YYYY/MM/DD kk:mm")}
+              action={
+                <Tooltip title="delete comment">
+                  <DeleteForeverRoundedIcon
+                    className="card-delete-button"
+                    onClick={() => onDeleteComment(comment?.id)}
+                  />
+                </Tooltip>
+              }
+            />
+            <div className="comment-card-body">
               <span className="comment">{comment?.comment}</span>
-              <Button
-                className="card-delete-button"
-                variant="text"
-                onClick={() => onDeleteComment(comment?.id)}
-              >
-                Delete
-              </Button>
             </div>
           </Card>
         );

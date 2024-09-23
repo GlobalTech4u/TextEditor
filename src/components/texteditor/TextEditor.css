@@ -1,15 +1,44 @@
 .quill {
-  height: 400px;
+  height: 80vh;
   margin-top: 16px;
 }
 
+.ql-container {
+  background: black;
+  color: white;
+}
+
+.MuiCardHeader-root {
+  background-color: rgba(0, 0, 0, 0.05);
+  color: rgba(0, 0, 0, 0.54);
+  padding: 12px 16px !important;
+}
+
+.MuiCardHeader-content {
+  text-align: left;
+}
+
+.MuiCardHeader-title {
+  font-size: 15px !important;
+  letter-spacing: 0.1em !important;
+  text-transform: uppercase !important;
+  font-weight: 400 !important;
+}
+
 .comments-container {
-  width: 30%;
+  display: flex;
+  flex-direction: column;
+  row-gap: 16px;
+  overflow: auto;
+  max-height: 100vh;
+  height: 100%;
+  flex: 1 1 35%;
 }
 
 .text-editor-container {
   text-align: left;
-  width: 60%;
+  margin: 24px;
+  flex: 1 1 65%;
 }
 
 .text-editor-wrapper {
@@ -59,4 +88,11 @@
 .editor-title {
   font-size: 24px;
   font-weight: 400;
+}
+
+.popover-content {
+  display: flex;
+  flex-direction: column;
+  row-gap: 8px;
+  margin: 16px;
 }

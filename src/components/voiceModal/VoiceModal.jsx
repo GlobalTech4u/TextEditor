@@ -1,174 +1,158 @@
-import React, { useState } from 'react';
-import Modal from "@mui/material/Modal";
-import HighlightOffRoundedIcon from "@mui/icons-material/HighlightOffRounded";
-import { Chart, registerables } from 'chart.js';
-import { Line } from 'react-chartjs-2';
+import React, { useState } from "react";
+import { DraggableCore } from "react-draggable";
 
-import 'chartjs-plugin-dragdata';
+import Modal from "@mui/material/Modal";
+import { Button } from "@mui/material";
+import HighlightOffRoundedIcon from "@mui/icons-material/HighlightOffRounded";
+import GpsFixedRoundedIcon from "@mui/icons-material/GpsFixedRounded";
+
+import { convertPixelsToRange } from "../../helpers/voiceSettings";
+import { PIXELS_PER_RANGE, RANGE } from "../../constants/voiceSettings";
+
 import "./VoiceModal.css";
 
-Chart.register(...registerables);
-
 const VoiceModal = (props) => {
-    const { showVoiceModal, handleVoiceModalClose } = props;
+  const { showVoiceModal, handleVoiceModalClose, saveVoiceSettings } = props;
 
-    const [data, setData] = useState({
-        labels: [0, 1, 2, 3, 4],
-        datasets: [
-            {
-                label: 'Draggable Points',
-                data: [
-                    { x: 0, y: 1 },
-                    { x: 1, y: 3 },
-                    { x: 2, y: 2 },
-                    { x: 3, y: 4 },
-                    { x: 4, y: 5 },
-                ],
-                borderColor: 'rgba(75,192,192,1)',
-                backgroundColor: 'rgba(75,192,192,0.2)',
-                pointBackgroundColor: 'rgba(75,192,192,1)',
-                pointBorderColor: '#fff',
-                pointHoverBackgroundColor: '#fff',
-                pointHoverBorderColor: 'rgba(75,192,192,1)',
-                dragData: true,
-                dragX: true,
-                dragY: true,
-            },
-        ],
+  const [voicePitchPosition, setVoicePitchPosition] = useState({ x: 0, y: 0 });
+  const [pausePosition, setPausePosition] = useState({ x: 0, y: 0 });
+  const [voiceSettings, setVoiceSettings] = useState({
+    pause: 0,
+    voicePitch: 0,
+  });
+
+  const updateVoicePitch = (e, data) => {
+    let newX = data.x;
+    if (newX < 0) {
+      newX = 0;
+    }
+    // Assuming each unit is 85px for visualization
+    if (newX > RANGE * PIXELS_PER_RANGE) {
+      newX = RANGE * PIXELS_PER_RANGE;
+    }
+
+    setVoicePitchPosition({ x: newX, y: 0 });
+
+    // Convert back to the range 0-5
+    const value = convertPixelsToRange(newX);
+    setVoiceSettings({
+      ...voiceSettings,
+      voicePitch: value,
     });
+  };
 
-    const options = {
-        scales: {
-            x: {
-                type: 'linear',
-                position: 'bottom',
-            },
-            y: {
-                type: 'linear',
-                position: 'left',
-            },
-        },
-        plugins: {
-            dragData: {
-                round: 1,
-                onDragEnd: (e, datasetIndex, index, value) => {
-                    const newData = [...data.datasets[0].data];
-                    newData[index] = value;
-                    setData({
-                        ...data,
-                        datasets: [
-                            {
-                                ...data.datasets[0],
-                                data: newData,
-                            },
-                        ],
-                    });
-                },
-                dragX: true,
-                dragY: true,
-            },
-        },
-    };
+  const updatePause = (e, data) => {
+    let newX = data.x;
+    if (newX < 0) {
+      newX = 0;
+    }
+    // Assuming each unit is 85px for visualization
+    if (newX > RANGE * PIXELS_PER_RANGE) {
+      newX = RANGE * PIXELS_PER_RANGE;
+    }
 
-    return (
-        <Modal open={showVoiceModal} onClose={handleVoiceModalClose}>
-            <div className="voice-modal-container">
-                <div className="voice-modal-header">
-                    <h2 className="modal-title">Add Comment</h2>
-                    <HighlightOffRoundedIcon
-                        className="modal-close-icon"
-                        onClick={handleVoiceModalClose}
-                    />
-                </div>
-                <div className='voice-modal-points-container'>
-                    <Line data={data} options={options} />
-                </div>
+    setPausePosition({ x: newX, y: 0 });
+
+    // Convert back to the range 0-5
+    const value = convertPixelsToRange(newX);
+    setVoiceSettings({
+      ...voiceSettings,
+      pause: value,
+    });
+  };
+
+  const updateVoiceSettings = () => {
+    saveVoiceSettings(voiceSettings);
+  };
+
+  return (
+    <Modal open={showVoiceModal} onClose={handleVoiceModalClose}>
+      <div className="voice-modal-container">
+        <div className="voice-modal-header">
+          <h2 className="modal-title">Adjust Voice Settings</h2>
+          <HighlightOffRoundedIcon
+            className="modal-close-icon"
+            onClick={handleVoiceModalClose}
+          />
+        </div>
+        <div className="voice-modal-points-container">
+          <div
+            style={{ width: "450px", height: "100px", position: "relative" }}
+          >
+            <div className="voice-setting-header">
+              <span>Voice Pitch (Hz) </span>
+              <span>{voiceSettings?.voicePitch || 0}</span>
             </div>
-        </Modal>
-
-    )
-}
+            <DraggableCore axis="x" onDrag={updateVoicePitch}>
+              <div
+                style={{
+                  width: "auto",
+                  height: "auto",
+                  position: "absolute",
+                  top: "40px",
+                  left: `${voicePitchPosition.x}px`,
+                }}
+              >
+                <GpsFixedRoundedIcon />
+              </div>
+            </DraggableCore>
+            <div
+              style={{
+                position: "absolute",
+                top: "70px",
+                width: "100%",
+                display: "flex",
+                justifyContent: "space-between",
+              }}
+            >
+              {[...Array(6).keys()].map((i) => (
+                <span key={i}>{i}</span>
+              ))}
+            </div>
+          </div>
+          <div
+            style={{ width: "450px", height: "100px", position: "relative" }}
+          >
+            <div className="voice-setting-header">
+              <span>Pause (in seconds) </span>
+              <span>{voiceSettings?.pause || 0}</span>
+            </div>
+            <DraggableCore axis="x" onDrag={updatePause}>
+              <div
+                style={{
+                  width: "auto",
+                  height: "auto",
+                  position: "absolute",
+                  top: "40px",
+                  left: `${pausePosition.x}px`,
+                }}
+              >
+                <GpsFixedRoundedIcon />
+              </div>
+            </DraggableCore>
+            <div
+              style={{
+                position: "absolute",
+                top: "70px",
+                width: "100%",
+                display: "flex",
+                justifyContent: "space-between",
+              }}
+            >
+              {[...Array(6).keys()].map((i) => (
+                <span key={i}>{i}</span>
+              ))}
+            </div>
+          </div>
+        </div>
+        <div className="voice-modal-footer">
+          <Button variant="contained" onClick={updateVoiceSettings}>
+            Update
+          </Button>
+        </div>
+      </div>
+    </Modal>
+  );
+};
 
 export default VoiceModal;
-
-
-/*
-   ** Remove this commented code when points drag and drop functionality is done and stable **
-*/
-
-
-// import Modal from "@mui/material/Modal";
-// import Highcharts from 'highcharts';
-// import HighchartsReact from 'highcharts-react-official';
-// import HighchartsDrag from 'highcharts/modules/drag-panes';
-// import HighchartsMore from 'highcharts/highcharts-more';
-
-// import "./VoiceModal.css";
-
-// HighchartsMore(Highcharts);
-// HighchartsDrag(Highcharts);
-
-// const options = {
-//     chart: {
-//         type: 'scatter',
-//     },
-//     title: {
-//         text: 'Draggable Points',
-//     },
-//     xAxis: {
-//         title: {
-//             enabled: true,
-//             text: 'X Axis',
-//         },
-//         startOnTick: true,
-//         endOnTick: true,
-//         showLastLabel: true,
-//     },
-//     yAxis: {
-//         title: {
-//             text: 'Y Axis',
-//         },
-//     },
-//     plotOptions: {
-//         series: {
-//             dragDrop: {
-//                 draggableY: true,
-//                 draggableX: true
-//             },
-//             point: {
-//                 events: {
-//                     drop: function () {
-//                         console.log(`Point dropped at x: ${this.x}, y: ${this.y}`);
-//                     },
-//                 },
-//             },
-//         },
-//     },
-//     series: [
-//         {
-//             data: [
-//                 { x: 0, y: 1 },
-//                 { x: 1, y: 3 },
-//                 { x: 2, y: 2 },
-//                 { x: 3, y: 4 },
-//                 { x: 4, y: 5 },
-//             ],
-//         },
-//     ],
-// };
-
-
-// const VoiceModal = (props) => {
-
-//     return (
-//         <Modal open={true}>
-//             <div className="voice-modal-container">
-//                 <HighchartsReact highcharts={Highcharts} options={options} />
-//             </div>
-//         </Modal>
-//     );
-// };
-
-// export default VoiceModal;
-
-

@@ -19,3 +19,12 @@
 .voice-modal-points-container {
     margin: 24px;
 }
+
+.voice-setting-header {
+    text-align: center;
+}
+
+.voice-modal-footer {
+    display: flex;
+    justify-content: center;
+}
